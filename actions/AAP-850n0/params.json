@@ -1,0 +1,198 @@
+{
+    "category": "plugins",
+    "display": "Send basic email",
+    "fields": {
+        "AAE": {
+            "caption": "To email(s)",
+            "doc": "Recipient(s) of the email. separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
+            "editor": "DynamicValue",
+            "is_list": false,
+            "long_text": true,
+            "name": "to",
+            "rank": 0,
+            "value": "text"
+        },
+        "AAF": {
+            "caption": "From email",
+            "default_val": "dev@airdev.co",
+            "doc": "Email from which this will be sent. Ensure that this user is a Verified Sender in SendGrid (unless your SendGrid account is from before April 2020).",
+            "editor": "DynamicValue",
+            "is_list": false,
+            "name": "fromEmail",
+            "rank": 1,
+            "value": "text"
+        },
+        "AAG": {
+            "caption": "CC email(s)",
+            "doc": "separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
+            "editor": "DynamicValue",
+            "is_list": false,
+            "long_text": true,
+            "name": "cc",
+            "optional": true,
+            "rank": 5,
+            "value": "text"
+        },
+        "AAH": {
+            "caption": "BCC email(s)",
+            "doc": "separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
+            "editor": "DynamicValue",
+            "is_list": false,
+            "long_text": true,
+            "name": "bcc",
+            "optional": true,
+            "rank": 6,
+            "value": "text"
+        },
+        "AAI": {
+            "caption": "Subject",
+            "default_val": "Hello, World!",
+            "doc": "Subject of the email",
+            "editor": "DynamicValue",
+            "name": "subject",
+            "rank": 7,
+            "value": "text"
+        },
+        "AAJ": {
+            "caption": "Reply to",
+            "default_val": "dev@airdev.co",
+            "editor": "DynamicValue",
+            "name": "replyTo",
+            "rank": 3,
+            "value": "text"
+        },
+        "AAQ": {
+            "caption": "Button color",
+            "default_val": "rgba(2, 132, 254, 1)",
+            "editor": "Color",
+            "name": "buttonColor",
+            "optional": true,
+            "rank": 11
+        },
+        "AAR": {
+            "caption": "Body",
+            "default_val": "This is just a test email.",
+            "doc": "The main text body of the email.",
+            "editor": "DynamicValue",
+            "long_text": true,
+            "name": "body",
+            "options": "",
+            "rank": 8,
+            "value": "text"
+        },
+        "AAS": {
+            "caption": "Button link",
+            "default_val": "https://airdev.co",
+            "editor": "DynamicValue",
+            "name": "buttonLink",
+            "optional": true,
+            "rank": 12,
+            "value": "text"
+        },
+        "AAT": {
+            "caption": "Button text",
+            "default_val": "Click me!",
+            "editor": "DynamicValue",
+            "name": "buttonText",
+            "optional": true,
+            "rank": 13,
+            "value": "text"
+        },
+        "AAU": {
+            "caption": "Signature",
+            "default_val": "Sent via AirDev's SendGrid plugin",
+            "doc": "Text sent at the end of the email. This field can be HTML if you want to create an HTML signature.",
+            "editor": "DynamicValue",
+            "long_text": true,
+            "name": "signature",
+            "optional": true,
+            "rank": 14,
+            "value": "text"
+        },
+        "AAW": {
+            "caption": "Include Button",
+            "doc": "Include a button with the email",
+            "editor": "DynamicValue",
+            "name": "button",
+            "rank": 10,
+            "value": "boolean"
+        },
+        "AAX": {
+            "caption": "Attachment(s)",
+            "doc": "Files to be attached to the email",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "attachments",
+            "optional": true,
+            "rank": 15,
+            "value": "file"
+        },
+        "AAZ": {
+            "caption": "Logo",
+            "editor": "DynamicValue",
+            "name": "logo",
+            "rank": 9,
+            "value": "image"
+        },
+        "AAo": {
+            "caption": "From name",
+            "doc": "Name of the sender displayed to the receiver in their inbox",
+            "editor": "DynamicValue",
+            "name": "fromName",
+            "optional": true,
+            "rank": 2,
+            "value": "text"
+        },
+        "AAp": {
+            "caption": "Reply to name",
+            "doc": "Name of the reply-to email displayed to the receiver",
+            "editor": "DynamicValue",
+            "name": "replyToName",
+            "optional": true,
+            "rank": 4,
+            "value": "text"
+        },
+        "AAr": {
+            "caption": "Mail Merge",
+            "doc": "Fields to be replaced in the following fields: signature, subject, button text, body, from name, reply to name",
+            "editor": "key_value_list",
+            "name": "mailMerge",
+            "rank": 16,
+            "value": "text"
+        }
+    },
+    "return_value": {
+        "AAL": {
+            "caption": "Success",
+            "name": "success",
+            "rank": 0,
+            "value": "boolean"
+        },
+        "AAM": {
+            "caption": "Error",
+            "name": "error",
+            "rank": 1,
+            "value": "text"
+        },
+        "AAN": {
+            "caption": "Response Code",
+            "name": "responseCode",
+            "rank": 2,
+            "value": "number"
+        },
+        "AAO": {
+            "caption": "Response Dump",
+            "name": "responseDump",
+            "rank": 3,
+            "value": "text"
+        },
+        "AAs": {
+            "caption": "Request Dump",
+            "name": "requestDump",
+            "rank": 4,
+            "value": "text"
+        }
+    },
+    "type": "server_side",
+    "use_packages": true
+}

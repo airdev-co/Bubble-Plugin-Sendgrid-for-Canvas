@@ -1,0 +1,38 @@
+{
+    "category": "plugins",
+    "display": "Get all verified sender emails",
+    "return_value": {
+        "ABB": {
+            "caption": "Error",
+            "name": "error",
+            "rank": 0,
+            "value": "text"
+        },
+        "ABD": {
+            "caption": "Success",
+            "name": "success",
+            "rank": 1,
+            "value": "boolean"
+        },
+        "ABE": {
+            "caption": "responseCode",
+            "name": "responseCode",
+            "rank": 2,
+            "value": "number"
+        },
+        "ABF": {
+            "caption": "responseDump",
+            "name": "responseDump",
+            "rank": 3,
+            "value": "text"
+        },
+        "ABU": {
+            "caption": "Emails",
+            "is_list": true,
+            "name": "emails",
+            "rank": 4,
+            "value": "text"
+        }
+    },
+    "type": "server_side"
+}

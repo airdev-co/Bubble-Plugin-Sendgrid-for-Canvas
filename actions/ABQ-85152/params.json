@@ -1,0 +1,53 @@
+{
+    "category": "plugins",
+    "display": "Get verified sender request ID",
+    "fields": {
+        "ABT": {
+            "caption": "Email",
+            "doc": "Email address of the verification request that should be returned",
+            "editor": "DynamicValue",
+            "name": "email",
+            "rank": 0,
+            "value": "text"
+        }
+    },
+    "return_value": {
+        "ABB": {
+            "caption": "Error",
+            "name": "error",
+            "rank": 0,
+            "value": "text"
+        },
+        "ABD": {
+            "caption": "Success",
+            "name": "success",
+            "rank": 1,
+            "value": "boolean"
+        },
+        "ABE": {
+            "caption": "responseCode",
+            "name": "responseCode",
+            "rank": 2,
+            "value": "number"
+        },
+        "ABF": {
+            "caption": "responseDump",
+            "name": "responseDump",
+            "rank": 3,
+            "value": "text"
+        },
+        "ABS": {
+            "caption": "ID",
+            "name": "id",
+            "rank": 4,
+            "value": "number"
+        },
+        "ABX": {
+            "caption": "Verified",
+            "name": "verified",
+            "rank": 5,
+            "value": "boolean"
+        }
+    },
+    "type": "server_side"
+}

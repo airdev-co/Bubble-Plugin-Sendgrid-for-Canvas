@@ -1,0 +1,43 @@
+{
+    "category": "plugins",
+    "display": "Send email (legacy)",
+    "fields": {
+        "ABa": {
+            "caption": "HTML",
+            "default_val": "{                 \"personalizations\":                      [{\"to\": to,                      \"cc\": cc,                      \"bcc\": bcc,                     \"subject\": properties.subject}],                  \"from\": {\"email\": properties.fromEmail,                          \"name\": properties.fromName},                  \"reply_to\": {\"email\": properties.replyTo,                              \"name\": properties.replyToName},                  \"content\":[{                            \"type\": \"text/html\",                      \"value\": htmlString                      }],                 \"attachments\": attachments             }",
+            "doc": "The JSON body that will be sent to SendGrid's Send v3 API endpoint",
+            "editor": "DynamicValue",
+            "name": "html",
+            "rank": 0,
+            "value": "text"
+        }
+    },
+    "return_value": {
+        "AAL": {
+            "caption": "Success",
+            "name": "success",
+            "rank": 0,
+            "value": "boolean"
+        },
+        "AAM": {
+            "caption": "Error",
+            "name": "error",
+            "rank": 1,
+            "value": "text"
+        },
+        "AAN": {
+            "caption": "Response Code",
+            "name": "responseCode",
+            "rank": 2,
+            "value": "number"
+        },
+        "AAO": {
+            "caption": "Response Dump",
+            "name": "responseDump",
+            "rank": 3,
+            "value": "text"
+        }
+    },
+    "type": "server_side",
+    "use_packages": false
+}

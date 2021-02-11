@@ -1,0 +1,11 @@
+{
+    "dependencies": {
+        "use_jquery": true
+    },
+    "shared_keys": {
+        "ABn": {
+            "caption": "API Key",
+            "type": "secure"
+        }
+    }
+}

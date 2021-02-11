@@ -1,0 +1,10 @@
+{
+    "categories": {
+        "0": "email"
+    },
+    "description": "SendGrid plugin included with AirDev Canvas templates",
+    "image": "//s3.amazonaws.com/appforest_uf/f1607362852207x161556360801667000/sendgrid.png",
+    "license": "open_source",
+    "link": "plugins@airdev,co",
+    "name": "Sendgrid for Canvas"
+}

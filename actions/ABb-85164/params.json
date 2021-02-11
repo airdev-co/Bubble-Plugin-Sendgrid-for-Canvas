@@ -1,0 +1,98 @@
+{
+    "category": "plugins",
+    "display": "Send verified sender request",
+    "fields": {
+        "ABc": {
+            "caption": "Nickname",
+            "editor": "DynamicValue",
+            "name": "nickname",
+            "rank": 0,
+            "value": "text"
+        },
+        "ABd": {
+            "caption": "From email",
+            "editor": "DynamicValue",
+            "name": "from_email",
+            "rank": 1,
+            "value": "text"
+        },
+        "ABe": {
+            "caption": "From name",
+            "editor": "DynamicValue",
+            "name": "from_name",
+            "rank": 2,
+            "value": "text"
+        },
+        "ABf": {
+            "caption": "Reply to",
+            "editor": "DynamicValue",
+            "name": "reply_to",
+            "rank": 3,
+            "value": "text"
+        },
+        "ABh": {
+            "caption": "Street address line 2",
+            "editor": "DynamicValue",
+            "name": "street_address_line_2",
+            "rank": 6,
+            "value": "text"
+        },
+        "ABi": {
+            "caption": "Street address line 1",
+            "default_val": "1 Market Street",
+            "editor": "DynamicValue",
+            "name": "street_address_line_1",
+            "rank": 5,
+            "value": "text"
+        },
+        "ABj": {
+            "caption": "City",
+            "default_val": "San Franscisco",
+            "editor": "DynamicValue",
+            "name": "city",
+            "rank": 7,
+            "value": "text"
+        },
+        "ABk": {
+            "caption": "Country",
+            "default_val": "USA",
+            "editor": "DynamicValue",
+            "name": "country",
+            "rank": 8,
+            "value": "text"
+        },
+        "ABl": {
+            "caption": "SendGrid requests information about verified senders, including a street address, which according to Sendgrid is required by CAN-SPAM regulations. See https://sendgrid.com/docs/ui/sending-email/senders/ for more info.",
+            "editor": "Label",
+            "name": "address_info",
+            "rank": 4
+        }
+    },
+    "return_value": {
+        "ABB": {
+            "caption": "Error",
+            "name": "error",
+            "rank": 0,
+            "value": "text"
+        },
+        "ABD": {
+            "caption": "Success",
+            "name": "success",
+            "rank": 1,
+            "value": "boolean"
+        },
+        "ABE": {
+            "caption": "responseCode",
+            "name": "responseCode",
+            "rank": 2,
+            "value": "number"
+        },
+        "ABF": {
+            "caption": "responseDump",
+            "name": "responseDump",
+            "rank": 3,
+            "value": "text"
+        }
+    },
+    "type": "server_side"
+}
