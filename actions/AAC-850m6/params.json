@@ -97,6 +97,36 @@
             "optional": true,
             "rank": 4,
             "value": "text"
+        },
+        "ABp": {
+            "caption": "Extra parameters",
+            "doc": "Enter custom JSON to show other parameters in these fields. Check the SendGrid V3 Send API endpoint documentation for possible parameters to send,                 Example JSON: {\"categories\": [\"marketing\", \"campaign\", \"2021\"],    \"tracking_settings\": {     \"click_tracking\": {       \"enable\": true,       \"enable_text\": false     },     \"open_tracking\": {       \"enable\": true,       \"substitution_tag\": \"%open-track%\"     },     \"subscription_tracking\": {       \"enable\": false     }   }  }",
+            "editor": "DynamicValue",
+            "long_text": true,
+            "name": "extra_parameters",
+            "optional": true,
+            "rank": 10,
+            "value": "text"
+        },
+        "ABq": {
+            "caption": "Throw errors",
+            "default_val": false,
+            "editor": "DynamicValue",
+            "name": "throw_errors",
+            "rank": 12,
+            "value": "boolean"
+        },
+        "ABr": {
+            "caption": "Throw a Bubble error when the email is not sent, or some other error happens on the SendGrid side. This will stop the rest of the workflow from executing.",
+            "editor": "Label",
+            "name": "info",
+            "rank": 11
+        },
+        "ABv": {
+            "caption": "When unhandled errors are NOT thrown, the workflow keeps executing and no error message is shown in the Server logs. Instead, the error message is exposed as a result of this plugin action, and you can set up appropriate error handling logic in the subsequent workflow actions.",
+            "editor": "Label",
+            "name": "info2",
+            "rank": 13
         }
     },
     "return_value": {

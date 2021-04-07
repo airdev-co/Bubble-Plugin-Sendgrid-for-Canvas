@@ -19,9 +19,17 @@ function(properties, context) {
             "responseDump": JSON.stringify(response)
         }*/
     
-    	var request = response.body.results.filter(result => result.from_email.toLowerCase() === properties.email)[0];
-    	var id = request.id;
-    	var verified = request.verified;
+    var verified;
+    var id;
+    var request;
+    try {
+    	request = response.body.results.filter(result => result.from_email.toLowerCase() === properties.email)[0];
+    	id = request.id;
+    	verified = request.verified;
+    } catch (err) {
+        console.error(err);
+        console.error("Failed to get request ID");
+    }
     
         // check if response is 2XX
         // else, return error

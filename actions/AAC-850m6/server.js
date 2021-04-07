@@ -72,6 +72,28 @@
                     });
             });
         }
+    
+        var extraParams;
+        if (properties.extra_parameters !== undefined && properties.extra_parameters !== null && properties.extra_parameters !== "") {
+            try {
+                extraParams = JSON.parse(properties.extra_parameters);
+            } catch (err) {
+                console.error("Unable to parse extra parameters in SendGrid Send basic email action. Throwing error, email will not be sent.");
+                console.error(err);
+                // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+                return {
+                    "success": false,
+                    "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+                };
+            }
+            if (typeof extraParams !== "object") {
+                // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+                return {
+                    "success": false,
+                    "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+                };
+            }
+        }
 
 
         // return {
@@ -122,6 +144,16 @@
             */
             json: true
         };
+    
+        if (extraParams !== undefined && Array.isArray(extraParams))
+            extraParams.forEach(paramObj => {
+                var key = Object.keys(paramObj)[0];
+               options.body[key] = paramObj[key];
+            });
+        else if (extraParams !== undefined)
+            Object.keys(extraParams).forEach(key => {
+               options.body[key] = extraParams[key];
+            });
 
 
         // delete empty fields from HTTP request options JSON
@@ -150,6 +182,12 @@
         else {
             error = "Status Code: " + response.statusCode + " \nbody: " + JSON.stringify(response.body);
         }
+        
+
+        if (properties.throw_errors === true && success === false)
+            throw error;
+
+
         return {
             "error": error,
             "success": success,

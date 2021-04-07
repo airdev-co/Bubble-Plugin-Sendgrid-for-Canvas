@@ -3,6 +3,7 @@ function(properties, context) {
 // https://sendgrid.com/docs/API_Reference/api_v3.html
 // https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html
 
+
     var log = "";
     
     var buttonCSS = properties.button ? ".btn-primary {text-decoration: none; color: #FFF; background-color: " + properties.buttonColor + "; border: solid " + properties.buttonColor + "; border-width: 10px 20px; line-height: 2; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; }" : "";
@@ -20,9 +21,6 @@ function(properties, context) {
     if (properties.signature !== null) {
         signature = '<tr style="margin: 0;padding: 0;font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;"> <td class="content-block" style="margin: 0;padding: 0 0 20px;font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;line-height: 1.5;">' + signature + '</td> </tr>';
     } 
-
-
-    
     
     var logo = properties.logo;
     if (!logo.includes("http"))
@@ -47,9 +45,9 @@ function(properties, context) {
         properties.bcc.get(0, properties.bcc.length()).forEach(email => bcc.push({"email": email}));
         */
 
-    if (to === null)
+    if (properties.to === null)
         return {
-            error: "To email must not be empty",
+            error: "\"To email\" input must not be empty. Failed to send email.",
             success: false
         };
     
@@ -112,6 +110,28 @@ function(properties, context) {
     //     "responseDump" : ""
     // }
     
+    var extraParams;
+    if (properties.extra_parameters !== undefined && properties.extra_parameters !== null && properties.extra_parameters !== "") {
+        try {
+            extraParams = JSON.parse(properties.extra_parameters);
+        } catch (err) {
+            console.error("Unable to parse extra parameters in SendGrid Send basic email action. Throwing error, email will not be sent.");
+            console.error(err);
+            // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+            return {
+                "success": false,
+                "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+            };
+        }
+        if (typeof extraParams !== "object") {
+            // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+            return {
+                "success": false,
+                "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+            };
+        }
+    }
+    
     
     const options = {
         uri: "https://api.sendgrid.com/v3/mail/send",
@@ -161,6 +181,16 @@ function(properties, context) {
         */
             json: true
         };
+    
+    if (extraParams !== undefined && Array.isArray(extraParams))
+        extraParams.forEach(paramObj => {
+            var key = Object.keys(paramObj)[0];
+           options.body[key] = paramObj[key];
+        });
+    else if (extraParams !== undefined)
+        Object.keys(extraParams).forEach(key => {
+           options.body[key] = extraParams[key];
+        });
     
     // Fields to be replaced in the following fields: signature, subject, button text, body, from name, reply to name
     // "[{"key":"test1key","value":"test1value 4"},{"key":"test2","value":"test2value 4"},{"key":"test3","value":"test3value 4"}]"
@@ -212,6 +242,9 @@ function(properties, context) {
         error = "Status Code: " + response.statusCode + " \nbody: " + JSON.stringify(response.body);
     }
 
+    if (properties.throw_errors === true && success === false)
+        throw error;
+    
     // error = JSON.stringify(properties.mailMerge); 
     // "[{"key":"test1key","value":"test1value 4"},{"key":"test2","value":"test2value 4"},{"key":"test3","value":"test3value 4"}]"
     return {
@@ -219,7 +252,7 @@ function(properties, context) {
         "success": success,
         "responseCode": response.statusCode,
         "responseDump" : JSON.stringify(response),
-        "requestDump" : JSON.stringify(options),
+        //"requestDump" : JSON.stringify(options),
     }
 
 
