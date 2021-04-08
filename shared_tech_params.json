@@ -6,6 +6,14 @@
         "ABn": {
             "caption": "API Key",
             "type": "secure"
+        },
+        "ABz": {
+            "caption": "Postmark Account API Token",
+            "type": "secure"
+        },
+        "ACA": {
+            "caption": "Postmark Server API Token",
+            "type": "secure"
         }
     }
 }

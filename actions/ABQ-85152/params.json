@@ -7,8 +7,35 @@
             "doc": "Email address of the verification request that should be returned",
             "editor": "DynamicValue",
             "name": "email",
-            "rank": 0,
+            "rank": 4,
             "value": "text"
+        },
+        "ACi": {
+            "caption": "This plugin supports using either SendGrid or Postmark to send emails. Select the one below that you'd like to use.",
+            "editor": "Label",
+            "name": "info1",
+            "rank": 0
+        },
+        "ACj": {
+            "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes.",
+            "editor": "Label",
+            "name": "info2",
+            "rank": 1
+        },
+        "ACk": {
+            "caption": "Email provider",
+            "default_val": "Sendgrid",
+            "doc": "API Keys must be set up in the Plugins tab for this particular provider.",
+            "editor": "Dropdown",
+            "name": "email_provider",
+            "options": "Sendgrid,Postmark",
+            "rank": 2
+        },
+        "ACl": {
+            "caption": "------",
+            "editor": "Label",
+            "name": "info5",
+            "rank": 3
         }
     },
     "return_value": {

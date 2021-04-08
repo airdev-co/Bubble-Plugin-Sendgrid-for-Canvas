@@ -9,7 +9,7 @@
             "is_list": false,
             "long_text": true,
             "name": "to",
-            "rank": 0,
+            "rank": 4,
             "value": "text"
         },
         "AAF": {
@@ -19,7 +19,7 @@
             "editor": "DynamicValue",
             "is_list": false,
             "name": "fromEmail",
-            "rank": 1,
+            "rank": 5,
             "value": "text"
         },
         "AAG": {
@@ -30,7 +30,7 @@
             "long_text": true,
             "name": "cc",
             "optional": true,
-            "rank": 5,
+            "rank": 9,
             "value": "text"
         },
         "AAH": {
@@ -41,7 +41,7 @@
             "long_text": true,
             "name": "bcc",
             "optional": true,
-            "rank": 6,
+            "rank": 10,
             "value": "text"
         },
         "AAI": {
@@ -50,7 +50,7 @@
             "doc": "Subject of the email",
             "editor": "DynamicValue",
             "name": "subject",
-            "rank": 7,
+            "rank": 11,
             "value": "text"
         },
         "AAJ": {
@@ -58,7 +58,7 @@
             "default_val": "dev@airdev.co",
             "editor": "DynamicValue",
             "name": "replyTo",
-            "rank": 3,
+            "rank": 7,
             "value": "text"
         },
         "AAQ": {
@@ -67,7 +67,7 @@
             "editor": "Color",
             "name": "buttonColor",
             "optional": true,
-            "rank": 11
+            "rank": 15
         },
         "AAR": {
             "caption": "Body",
@@ -77,7 +77,7 @@
             "long_text": true,
             "name": "body",
             "options": "",
-            "rank": 8,
+            "rank": 12,
             "value": "text"
         },
         "AAS": {
@@ -86,7 +86,7 @@
             "editor": "DynamicValue",
             "name": "buttonLink",
             "optional": true,
-            "rank": 12,
+            "rank": 16,
             "value": "text"
         },
         "AAT": {
@@ -95,7 +95,7 @@
             "editor": "DynamicValue",
             "name": "buttonText",
             "optional": true,
-            "rank": 13,
+            "rank": 17,
             "value": "text"
         },
         "AAU": {
@@ -106,7 +106,7 @@
             "long_text": true,
             "name": "signature",
             "optional": true,
-            "rank": 14,
+            "rank": 18,
             "value": "text"
         },
         "AAW": {
@@ -114,7 +114,7 @@
             "doc": "Include a button with the email",
             "editor": "DynamicValue",
             "name": "button",
-            "rank": 10,
+            "rank": 14,
             "value": "boolean"
         },
         "AAX": {
@@ -124,32 +124,32 @@
             "is_list": true,
             "name": "attachments",
             "optional": true,
-            "rank": 15,
+            "rank": 19,
             "value": "file"
         },
         "AAZ": {
             "caption": "Logo",
             "editor": "DynamicValue",
             "name": "logo",
-            "rank": 9,
+            "rank": 13,
             "value": "image"
         },
         "AAo": {
             "caption": "From name",
-            "doc": "Name of the sender displayed to the receiver in their inbox",
+            "doc": "SendGrid only. Name of the sender displayed to the receiver in their inbox",
             "editor": "DynamicValue",
             "name": "fromName",
             "optional": true,
-            "rank": 2,
+            "rank": 6,
             "value": "text"
         },
         "AAp": {
             "caption": "Reply to name",
-            "doc": "Name of the reply-to email displayed to the receiver",
+            "doc": "SendGrid only. Name of the reply-to email displayed to the receiver",
             "editor": "DynamicValue",
             "name": "replyToName",
             "optional": true,
-            "rank": 4,
+            "rank": 8,
             "value": "text"
         },
         "AAr": {
@@ -157,7 +157,7 @@
             "doc": "Fields to be replaced in the following fields: signature, subject, button text, body, from name, reply to name",
             "editor": "key_value_list",
             "name": "mailMerge",
-            "rank": 16,
+            "rank": 20,
             "value": "text"
         },
         "ABo": {
@@ -167,28 +167,54 @@
             "long_text": true,
             "name": "extra_parameters",
             "optional": true,
-            "rank": 17,
+            "rank": 21,
             "value": "text"
         },
         "ABs": {
             "caption": "Throw a Bubble error when the email is not sent, or some other error happens on the SendGrid side. This will stop the rest of the workflow from executing.",
             "editor": "Label",
             "name": "info",
-            "rank": 18
+            "rank": 22
         },
         "ABt": {
             "caption": "Throw errors",
             "default_val": false,
             "editor": "DynamicValue",
             "name": "throw_errors",
-            "rank": 19,
+            "rank": 23,
             "value": "boolean"
         },
         "ABu": {
             "caption": "When unhandled errors are NOT thrown, the workflow keeps executing and no error message is shown in the Server logs. Instead, the error message is exposed as a result of this plugin action, and you can set up appropriate error handling logic in the subsequent workflow actions.",
             "editor": "Label",
             "name": "info2",
-            "rank": 20
+            "rank": 24
+        },
+        "ACe": {
+            "caption": "This plugin supports using either SendGrid or Postmark to send emails. Select the one below that you'd like to use.",
+            "editor": "Label",
+            "name": "info3",
+            "rank": 0
+        },
+        "ACf": {
+            "caption": "------",
+            "editor": "Label",
+            "name": "info4",
+            "rank": 3
+        },
+        "ACg": {
+            "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes.",
+            "editor": "Label",
+            "name": "info5",
+            "rank": 1
+        },
+        "ACh": {
+            "caption": "Email provider",
+            "default_val": "Sendgrid",
+            "editor": "Dropdown",
+            "name": "email_provider",
+            "options": "Sendgrid,Postmark",
+            "rank": 2
         }
     },
     "return_value": {

@@ -8,8 +8,14 @@
             "doc": "The JSON body that will be sent to SendGrid's Send v3 API endpoint",
             "editor": "DynamicValue",
             "name": "html",
-            "rank": 0,
+            "rank": 1,
             "value": "text"
+        },
+        "ACu": {
+            "caption": "As this is a legacy flow for Canvas apps created before this plugin existed, this flow is not updated to work with Postmark. Contact support@airdev.co if this is a feature your app would use.",
+            "editor": "Label",
+            "name": "info",
+            "rank": 0
         }
     },
     "return_value": {

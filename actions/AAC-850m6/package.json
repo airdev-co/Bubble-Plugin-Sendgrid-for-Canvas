@@ -1,5 +1,7 @@
 {
     "dependencies": {
-        "axios": "latest"
+        "axios": "latest",
+        "postmark": "latest",
+        "mime-types": "latest"
     }
 }

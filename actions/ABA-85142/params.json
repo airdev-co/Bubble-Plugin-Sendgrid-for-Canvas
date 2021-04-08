@@ -1,6 +1,6 @@
 {
     "category": "plugins",
-    "display": "Get mail settings",
+    "display": "Get mail settings (Sendgrid)",
     "return_value": {
         "ABB": {
             "caption": "Error",

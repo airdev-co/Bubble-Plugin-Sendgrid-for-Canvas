@@ -1,4 +1,6 @@
-    function(properties, context) {
+function(properties, context) {
+      
+    if (properties.email_provider === "Sendgrid") {
 
         var log;
 
@@ -194,6 +196,172 @@
             "responseCode": response.statusCode,
             "responseDump" : JSON.stringify(response)
         }
-
-
     }
+    else if (properties.email_provider === "Postmark") {
+        try {
+            const postmark = require("postmark");
+            const mime = require('mime-types');
+
+            // https://sendgrid.com/docs/API_Reference/api_v3.html
+            // https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html
+
+            var log = "";
+
+            var htmlString = properties.html;
+            var plainText = properties.plain_text;
+
+
+
+            if (to === null)
+                return {
+                    error: "To email must not be empty",
+                    success: false
+                };
+
+            var to = properties.to.split(",").map(s => s.trim());
+            to = to.map(toEmail => {return {"email": toEmail}});
+            to = to.join(",");
+            if (properties.cc) {
+                var cc = properties.cc.split(",").map(s => s.trim());
+                cc = cc.map(toEmail => {return {"email": toEmail}});
+                cc = cc.join(",");
+            }
+            if (properties.bcc) {
+                var bcc = properties.bcc.split(",").map(s => s.trim());
+                bcc = bcc.map(toEmail => {return {"email": toEmail}});
+                bcc = bcc.join(",");
+            }
+
+            function getBase64FromURL(url, callback) {
+
+                var axios = require("axios");
+
+                let image = context.async(async callback => {
+                    var image = await axios.get(url, {responseType: 'arraybuffer'});
+                    callback(null, image);
+                });
+
+                // log += Object.keys(image).join();
+                log += JSON.stringify(image.headers);
+
+                let filebase64 = Buffer.from(image.data).toString('base64');
+
+                // attachments.push("test1");
+                callback(filebase64, url);
+            }
+
+            // check if there are attachments
+            var attachments = [];
+            var urls = [];
+            if (properties.attachments !== null && properties.attachments.length() > 0) {
+                properties.attachments.get(0, properties.attachments.length()).forEach(url => {
+                    // download base 64 for the file(s)
+                    if (!urls.includes(url))
+                        getBase64FromURL("https:" + url, function(base64, url) {
+                            // handle weird urls
+                            var filename = url.split('/').pop().split('#')[0].split('?')[0];
+                            attachments.push({
+                                "Name": filename,
+                                "Content": base64,
+                                "ContentType": mime.lookup(filename)
+                            });
+                            urls.push(url);
+                        });
+                });
+            }
+
+
+            // return {
+            //     "error": JSON.stringify(attachments),
+            //     "success": false,
+            //     "responseCode": 1234,
+            //     "responseDump" : ""
+            // }
+
+            var postmarkBody = {
+                "From": properties.fromEmail,
+                "ReplyTo": properties.replyTo,
+                "To": properties.to,
+                "Cc": cc,
+                "Bcc": bcc,
+                "Subject": properties.subject,
+                "TextBody": plainText,
+                "HtmlBody": htmlString,
+                "TrackOpens": true,
+                "TrackLinks": "HtmlOnly",
+                "Attachments": attachments,
+                /*[{
+                "Name": "readme.txt",
+                "Content": "dGVzdCBjb250ZW50",
+                "ContentType": "text/plain"
+                },
+                {
+                "Name": "report.pdf",
+                "Content": "dGVzdCBjb250ZW50",
+                "ContentType": "application/octet-stream"
+                }],*/
+                "MessageStream": "outbound",
+            }
+
+
+            // delete empty fields from send email options JSON
+            function cleanPostmarkBody() {
+            if (properties.cc === null || properties.cc.length === 0)
+                delete postmarkBody.cc;
+            if (properties.bcc === null || properties.bcc.length === 0)
+                delete postmarkBody.bcc;
+            if (properties.replyTo === null || properties.replyTo.trim() === "")
+                delete postmarkBody.ReplyTo;
+            if (attachments.length === 0)
+                delete postmarkBody.Attachments;
+            }
+
+            cleanPostmarkBody();
+
+        //  return {"error": "test"}
+            var client = new postmark.ServerClient(context.keys["Postmark Server API Token"]);
+            var ret;
+
+            var result = context.async(async callback => {
+
+                try {
+                    var response = await client.sendEmail(
+                        postmarkBody,
+                        function(err, data) {
+                            console.log(err)
+                            console.log(data)
+
+                            ret = {
+                                "response" : data,
+                            };
+                            return ret;
+                        }
+                    );
+                    callback(null, response);
+                }
+                catch (err) {
+                    callback(err);
+                }
+            });
+
+            // return {"error": "early return"}
+
+            var success = (ret.response.ErrorCode === 0) ?  true: false;
+
+            return {
+                "success": success,
+                "error": JSON.stringify(ret),
+                "responseDump": JSON.stringify(result),
+                // "requestDump" : JSON.stringify(postmarkBody)
+            };
+
+        } catch (err) {
+            return {
+                "responseDump": "error catch block",
+                "error": err.toString()
+            };
+        }
+    }
+
+
+}
