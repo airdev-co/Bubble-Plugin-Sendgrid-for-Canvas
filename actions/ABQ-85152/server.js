@@ -1,6 +1,17 @@
 function(properties, context) {
+    
+    var email_provider;
+    var postmark;
+    var sendgrid;
+    try {
+        var email_provider = properties.email_provider.toLowerCase().trim();
+        postmark = email_provider.includes("postmark");
+        sendgrid = email_provider.includes("sendgrid") || postmark === false;
+    } catch (err) {
+        sendgrid = true;
+    }
       
-     if (properties.email_provider === "Sendgrid") {
+    if (sendgrid === true) {
 
 
             const options = {
@@ -48,12 +59,12 @@ function(properties, context) {
                 "error": error,
                 "success": success,
                 "responseCode": response.statusCode,
-                "responseDump" : JSON.stringify(response),
+                //"responseDump" : JSON.stringify(response),
                 "id": id,
                 "verified": verified
             };
     }
-    else if (properties.email_provider === "Postmark") {
+    else if (postmark === true) {
         
         // https://postmarkapp.com/developer/api/signatures-api#list-sender-signatures
 
@@ -76,9 +87,16 @@ function(properties, context) {
             "responseDump": JSON.stringify(response)
         }*/
 
-        var request = response.body.SenderSignatures.filter(result => result.EmailAddress.toLowerCase() === properties.email)[0];
-        var request_id = request.ID;
-        var confirmed = request.Confirmed;
+        var request;
+        var request_id;
+        var confirmed;
+        try {
+	        request = response.body.SenderSignatures.filter(result => result.EmailAddress.toLowerCase() === properties.email)[0]; 
+            request_id = request.ID;
+            confirmed = request.Confirmed;       
+        } catch (err) {
+            
+        }
 
 
         // check if response is 2XX
@@ -96,7 +114,7 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response),
+            //"responseDump" : JSON.stringify(response),
             "verified": confirmed,
             "id": request_id
         }

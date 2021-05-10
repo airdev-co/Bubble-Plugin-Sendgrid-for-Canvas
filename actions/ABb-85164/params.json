@@ -6,35 +6,36 @@
             "caption": "Nickname",
             "editor": "DynamicValue",
             "name": "nickname",
-            "rank": 0,
+            "rank": 4,
             "value": "text"
         },
         "ABd": {
             "caption": "From email",
             "editor": "DynamicValue",
             "name": "from_email",
-            "rank": 1,
+            "rank": 5,
             "value": "text"
         },
         "ABe": {
             "caption": "From name",
             "editor": "DynamicValue",
             "name": "from_name",
-            "rank": 2,
+            "rank": 6,
             "value": "text"
         },
         "ABf": {
             "caption": "Reply to",
             "editor": "DynamicValue",
             "name": "reply_to",
-            "rank": 3,
+            "rank": 7,
             "value": "text"
         },
         "ABh": {
             "caption": "Street address line 2",
             "editor": "DynamicValue",
             "name": "street_address_line_2",
-            "rank": 7,
+            "optional": true,
+            "rank": 11,
             "value": "text"
         },
         "ABi": {
@@ -42,7 +43,7 @@
             "default_val": "1 Market Street",
             "editor": "DynamicValue",
             "name": "street_address_line_1",
-            "rank": 6,
+            "rank": 10,
             "value": "text"
         },
         "ABj": {
@@ -50,7 +51,7 @@
             "default_val": "San Franscisco",
             "editor": "DynamicValue",
             "name": "city",
-            "rank": 8,
+            "rank": 12,
             "value": "text"
         },
         "ABk": {
@@ -58,26 +59,26 @@
             "default_val": "USA",
             "editor": "DynamicValue",
             "name": "country",
-            "rank": 9,
+            "rank": 13,
             "value": "text"
         },
         "ABl": {
             "caption": "SendGrid requests information about verified senders, including a street address, which according to Sendgrid is required by CAN-SPAM regulations. See https://sendgrid.com/docs/ui/sending-email/senders/ for more info.",
             "editor": "Label",
             "name": "address_info",
-            "rank": 4
+            "rank": 8
         },
         "ACv": {
             "caption": "The below fields are only used for SendGrid.",
             "editor": "Label",
             "name": "info",
-            "rank": 5
+            "rank": 9
         },
         "ACw": {
-            "caption": "The below field is only used for Postmark.",
+            "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes. API Keys must be set up in the Plugins tab.",
             "editor": "Label",
             "name": "info2",
-            "rank": 10
+            "rank": 1
         },
         "ACx": {
             "caption": "Return path domain",
@@ -85,7 +86,34 @@
             "editor": "DynamicValue",
             "name": "return_path_domain",
             "optional": true,
-            "rank": 11,
+            "rank": 15,
+            "value": "text"
+        },
+        "ADH": {
+            "caption": "This plugin supports using either SendGrid or Postmark to send emails. Select the one below that you'd like to use.",
+            "editor": "Label",
+            "name": "info",
+            "rank": 0
+        },
+        "ADI": {
+            "caption": "------",
+            "editor": "Label",
+            "name": "info3",
+            "rank": 3
+        },
+        "ADJ": {
+            "caption": "The below field is only used for Postmark.",
+            "editor": "Label",
+            "name": "info3",
+            "rank": 14
+        },
+        "ADK": {
+            "caption": "Email provider",
+            "default_val": "SendGrid",
+            "doc": "Enter either \"sendgrid\" or \"postmark\" in this field. It is not case sensitive. If nothing is entered here, or the text does not match \"sendgrid\" or \"postmark\", SendGrid will be used.",
+            "editor": "DynamicValue",
+            "name": "email_provider",
+            "rank": 2,
             "value": "text"
         }
     },
@@ -107,12 +135,6 @@
             "name": "responseCode",
             "rank": 2,
             "value": "number"
-        },
-        "ABF": {
-            "caption": "responseDump",
-            "name": "responseDump",
-            "rank": 3,
-            "value": "text"
         }
     },
     "type": "server_side"

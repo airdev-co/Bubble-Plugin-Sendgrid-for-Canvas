@@ -203,18 +203,20 @@
             "rank": 3
         },
         "ACg": {
-            "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes.",
+            "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes. API Keys must be set up in the Plugins tab.",
             "editor": "Label",
             "name": "info5",
             "rank": 1
         },
         "ACh": {
             "caption": "Email provider",
-            "default_val": "Sendgrid",
-            "editor": "Dropdown",
+            "default_val": "SendGrid",
+            "doc": "Enter either \"sendgrid\" or \"postmark\" in this field. It is not case sensitive. If nothing is entered here, or the text does not match \"sendgrid\" or \"postmark\", SendGrid will be used.",
+            "editor": "DynamicValue",
             "name": "email_provider",
             "options": "Sendgrid,Postmark",
-            "rank": 2
+            "rank": 2,
+            "value": "text"
         }
     },
     "return_value": {
@@ -235,18 +237,6 @@
             "name": "responseCode",
             "rank": 2,
             "value": "number"
-        },
-        "AAO": {
-            "caption": "Response Dump",
-            "name": "responseDump",
-            "rank": 3,
-            "value": "text"
-        },
-        "AAs": {
-            "caption": "Request Dump",
-            "name": "requestDump",
-            "rank": 4,
-            "value": "text"
         }
     },
     "type": "server_side",

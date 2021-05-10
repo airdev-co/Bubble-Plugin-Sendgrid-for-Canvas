@@ -1,6 +1,17 @@
 function(properties, context) {
+    
+    var email_provider;
+    var postmark;
+    var sendgrid;
+    try {
+        var email_provider = properties.email_provider.toLowerCase().trim();
+        postmark = email_provider.includes("postmark");
+        sendgrid = email_provider.includes("sendgrid") || postmark === false;
+    } catch (err) {
+        sendgrid = true;
+    }
       
-    if (properties.email_provider === "Sendgrid") {
+    if (sendgrid === true) {
 
         var log;
 
@@ -17,12 +28,17 @@ function(properties, context) {
             properties.bcc.get(0, properties.bcc.length()).forEach(email => bcc.push({"email": email}));
             */
         
-        if (to === null)
+        if (properties.to === null || properties.to === undefined || properties.to === "") {
+            returnError = "\"To email\" input must not be empty. Failed to send email."
+            
+            if (properties.throw_errors === true)
+                throw returnError;
             return {
-                error: "To email must not be empty",
+                error: "\"To email\" input must not be empty. Failed to send email.",
                 success: false
             };
-        
+        }
+    
         var to = properties.to.split(",").map(s => s.trim());
         to = to.map(toEmail => {return {"email": toEmail}});
         if (properties.cc) {
@@ -33,7 +49,7 @@ function(properties, context) {
             var bcc = properties.bcc.split(",").map(s => s.trim());
             bcc = bcc.map(toEmail => {return {"email": toEmail}});
         }
-
+        
         var htmlString = properties.html;//.replace(/\n/g, "");
 
 
@@ -59,7 +75,7 @@ function(properties, context) {
         // check if there are attachments
         var attachments = [];
         var urls = [];
-        if (properties.attachments !== null && properties.attachments.length() > 0) {
+        if (properties.attachments !== undefined && properties.attachments !== null && properties.attachments.length() > 0) {
             properties.attachments.get(0, properties.attachments.length()).forEach(url => {
                 // download base 64 for the file(s)
                 if (!urls.includes(url))
@@ -75,24 +91,35 @@ function(properties, context) {
             });
         }
     
+
         var extraParams;
         if (properties.extra_parameters !== undefined && properties.extra_parameters !== null && properties.extra_parameters !== "") {
             try {
                 extraParams = JSON.parse(properties.extra_parameters);
             } catch (err) {
-                console.error("Unable to parse extra parameters in SendGrid Send basic email action. Throwing error, email will not be sent.");
+                var returnError = "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";       
+                console.error(returnError);
                 console.error(err);
                 // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+
+                if (properties.throw_errors === true)
+                    throw returnError;
+                    
                 return {
                     "success": false,
-                    "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+                    "error": returnError
                 };
             }
             if (typeof extraParams !== "object") {
                 // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+                var returnError = "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";                
+
+                if (properties.throw_errors === true)
+                    throw returnError;
+
                 return {
                     "success": false,
-                    "error": "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent."
+                    "error": returnError
                 };
             }
         }
@@ -194,10 +221,10 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response)
+            //"responseDump" : JSON.stringify(response)
         }
     }
-    else if (properties.email_provider === "Postmark") {
+    else if (postmark === true) {
         try {
             const postmark = require("postmark");
             const mime = require('mime-types');
@@ -212,12 +239,17 @@ function(properties, context) {
 
 
 
-            if (to === null)
+            if (properties.to === null || properties.to === undefined || properties.to === "") {
+                returnError = "\"To email\" input must not be empty. Failed to send email."
+                
+                if (properties.throw_errors === true)
+                    throw returnError;
                 return {
-                    error: "To email must not be empty",
+                    error: "\"To email\" input must not be empty. Failed to send email.",
                     success: false
                 };
-
+            }
+    
             var to = properties.to.split(",").map(s => s.trim());
             to = to.map(toEmail => {return {"email": toEmail}});
             to = to.join(",");
@@ -253,7 +285,7 @@ function(properties, context) {
             // check if there are attachments
             var attachments = [];
             var urls = [];
-            if (properties.attachments !== null && properties.attachments.length() > 0) {
+            if (properties.attachments !== undefined && properties.attachments !== null && properties.attachments.length() > 0) {
                 properties.attachments.get(0, properties.attachments.length()).forEach(url => {
                     // download base 64 for the file(s)
                     if (!urls.includes(url))
@@ -318,6 +350,48 @@ function(properties, context) {
 
             cleanPostmarkBody();
 
+
+            var extraParams;
+            if (properties.extra_parameters !== undefined && properties.extra_parameters !== null && properties.extra_parameters !== "") {
+                try {
+                    var returnError = "Unable to parse extra parameters in Postmark Send basic email action. Throwing error, email will not be sent.";
+                    extraParams = JSON.parse(properties.extra_parameters);
+                } catch (err) {
+                    console.error(returnError);
+                    console.error(err);
+                    // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+                    
+                    if (properties.throw_errors === true)
+                        throw returnError;
+
+                    return {
+                        "success": false,
+                        "error": returnError
+                    };
+                }
+                if (typeof extraParams !== "object") {
+                    // throw "Unable to parse extra parameters in SendGrid Send basic email action. Due to this error, this email will not be sent.";
+                    
+                    if (properties.throw_errors === true)
+                        throw returnError;
+                        
+                    return {
+                        "success": false,
+                        "error": returnError
+                    };
+                }
+            }
+    
+            if (extraParams !== undefined && Array.isArray(extraParams))
+                extraParams.forEach(paramObj => {
+                    var key = Object.keys(paramObj)[0];
+                    postmarkBody[key] = paramObj[key];
+                });
+            else if (extraParams !== undefined)
+                Object.keys(extraParams).forEach(key => {
+                    postmarkBody[key] = extraParams[key];
+                });
+
         //  return {"error": "test"}
             var client = new postmark.ServerClient(context.keys["Postmark Server API Token"]);
             var ret;
@@ -346,22 +420,29 @@ function(properties, context) {
 
             // return {"error": "early return"}
 
-            var success = (ret.response.ErrorCode === 0) ?  true: false;
+            var success = ret.response.ErrorCode === 0;
+            //var error = 
+
+            if (properties.throw_errors === true && success === false)
+                throw JSON.stringify(ret);
 
             return {
                 "success": success,
                 "error": JSON.stringify(ret),
-                "responseDump": JSON.stringify(result),
+                //"responseDump": JSON.stringify(result),
                 // "requestDump" : JSON.stringify(postmarkBody)
             };
 
         } catch (err) {
+            
+            if (properties.throw_errors === true)
+                throw err.toString();
+
             return {
-                "responseDump": "error catch block",
+                //"responseDump": "error catch block",
                 "error": err.toString()
             };
         }
     }
-
 
 }

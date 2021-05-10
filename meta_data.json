@@ -2,9 +2,9 @@
     "categories": {
         "0": "email"
     },
-    "description": "SendGrid plugin included with AirDev Canvas templates",
+    "description": "Email plugin included with AirDev Canvas templates. Works with both SendGrid and Postmark (as of April 2021 - previously, only SendGrid was part of this plugin).\n\n--\n\nThe below secret key \"API Key\" on this plugin refers to the SendGrid API Key. Because the plugin used to only work with SendGrid, we've had to leave the name like this for backwards compatibility.\n\nSendGrid API keys should start with \"SG\", while Postmark API keys should be a string of numbers and letters with some hyphens in the middle.",
     "image": "//s3.amazonaws.com/appforest_uf/f1607362852207x161556360801667000/sendgrid.png",
     "license": "open_source",
     "link": "plugins@airdev,co",
-    "name": "Sendgrid for Canvas"
+    "name": "Email for Canvas"
 }

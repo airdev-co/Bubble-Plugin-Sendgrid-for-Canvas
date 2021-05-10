@@ -1,7 +1,17 @@
 function(properties, context) {
+    
+    var email_provider;
+    var postmark;
+    var sendgrid;
+    try {
+        var email_provider = properties.email_provider.toLowerCase().trim();
+        postmark = email_provider.includes("postmark");
+        sendgrid = email_provider.includes("sendgrid") || postmark === false;
+    } catch (err) {
+        sendgrid = true;
+    }
       
-    if (properties.email_provider === "Sendgrid") {
-
+    if (sendgrid === true) {
 
         const options = {
             uri: "https://api.sendgrid.com/v3/verified_senders",
@@ -39,10 +49,10 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response)
+            //"responseDump" : JSON.stringify(response)
         }
     }
-    else if (properties.email_provider === "Postmark") {
+    else if (postmark === true) {
         // https://postmarkapp.com/developer/api/signatures-api#sender-signature
 
         const options = {
@@ -83,7 +93,7 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response),
+            //"responseDump" : JSON.stringify(response),
         }
     }
 

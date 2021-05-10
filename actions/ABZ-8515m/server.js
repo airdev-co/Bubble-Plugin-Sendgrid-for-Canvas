@@ -47,7 +47,7 @@
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response)
+            //"responseDump" : JSON.stringify(response)
         }
 
 

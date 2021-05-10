@@ -1,6 +1,17 @@
 function(properties, context) {
+    
+    var email_provider;
+    var postmark;
+    var sendgrid;
+    try {
+        var email_provider = properties.email_provider.toLowerCase().trim();
+        postmark = email_provider.includes("postmark");
+        sendgrid = email_provider.includes("sendgrid") || postmark === false;
+    } catch (err) {
+        sendgrid = true;
+    }
       
-    if (properties.email_provider === "Sendgrid") {
+    if (sendgrid === true) {
 
 
         const options = {
@@ -32,14 +43,14 @@ function(properties, context) {
             if (response.statusCode > 199 && response.statusCode < 300)
                 return {
                     "success": true,
-                    "responseDump": JSON.stringify(response),
+                    //"responseDump": JSON.stringify(response),
                     "responseCode": response.statusCode,
                     "emails": []
                 };
             else // error
                 return {
                     "success": false,
-                    "responseDump": JSON.stringify(response),
+                    //"responseDump": JSON.stringify(response),
                     "responseCode": response.statusCode,
                     "emails": []
                 };
@@ -62,11 +73,11 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response),
+            //"responseDump" : JSON.stringify(response),
             "emails": emails
         };
     }
-    else if (properties.email_provider === "Postmark") {
+    else if (postmark === true) {
         
         // https://postmarkapp.com/developer/api/signatures-api#list-sender-signatures
 
@@ -114,7 +125,7 @@ function(properties, context) {
             "error": error,
             "success": success,
             "responseCode": response.statusCode,
-            "responseDump" : JSON.stringify(response),
+            //"responseDump" : JSON.stringify(response),
             "emails": emails
         }
     }
