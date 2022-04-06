@@ -63,7 +63,7 @@ function(properties, context) {
                 "Content-Type": "application/json",
                 "X-Postmark-Account-Token": context.keys["Postmark Account API Token"]
             },
-            body : {
+            body: {
               "FromEmail": properties.from_email,
               "Name": properties.from_name,
               "ReplyToEmail": properties.reply_to,
@@ -94,6 +94,7 @@ function(properties, context) {
             "success": success,
             "responseCode": response.statusCode,
             //"responseDump" : JSON.stringify(response),
+            //"requestDump" : JSON.stringify(options),
         }
     }
 

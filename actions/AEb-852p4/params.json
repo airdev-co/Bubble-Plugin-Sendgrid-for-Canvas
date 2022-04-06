@@ -1,8 +1,8 @@
 {
     "category": "plugins",
-    "display": "Send basic email",
+    "display": "Send multiple basic emails (sendgrid)",
     "fields": {
-        "AAE": {
+        "ADz": {
             "caption": "To email(s)",
             "doc": "Recipient(s) of the email. separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
             "editor": "DynamicValue",
@@ -12,7 +12,7 @@
             "rank": 4,
             "value": "text"
         },
-        "AAF": {
+        "AEA": {
             "caption": "From email",
             "default_val": "dev@airdev.co",
             "doc": "Email from which this will be sent. Ensure that this user is a Verified Sender in SendGrid (unless your SendGrid account is from before April 2020).",
@@ -22,38 +22,16 @@
             "rank": 5,
             "value": "text"
         },
-        "AAG": {
-            "caption": "CC email(s)",
-            "doc": "separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
-            "editor": "DynamicValue",
-            "is_list": false,
-            "long_text": true,
-            "name": "cc",
-            "optional": true,
-            "rank": 9,
-            "value": "text"
-        },
-        "AAH": {
-            "caption": "BCC email(s)",
-            "doc": "separate emails by a comma, e.g. plugins@airdev.co,plugins+1@airdev.co",
-            "editor": "DynamicValue",
-            "is_list": false,
-            "long_text": true,
-            "name": "bcc",
-            "optional": true,
-            "rank": 10,
-            "value": "text"
-        },
-        "AAI": {
+        "AED": {
             "caption": "Subject",
             "default_val": "Hello, World!",
             "doc": "Subject of the email",
             "editor": "DynamicValue",
             "name": "subject",
-            "rank": 11,
+            "rank": 9,
             "value": "text"
         },
-        "AAJ": {
+        "AEE": {
             "caption": "Reply to",
             "default_val": "dev@airdev.co",
             "editor": "DynamicValue",
@@ -61,15 +39,15 @@
             "rank": 7,
             "value": "text"
         },
-        "AAQ": {
+        "AEF": {
             "caption": "Button color (optional)",
             "default_val": "rgba(2, 132, 254, 1)",
             "editor": "Color",
             "name": "buttonColor",
             "optional": true,
-            "rank": 15
+            "rank": 13
         },
-        "AAR": {
+        "AEG": {
             "caption": "Body",
             "default_val": "This is just a test email.",
             "doc": "The main text body of the email.",
@@ -77,28 +55,28 @@
             "long_text": true,
             "name": "body",
             "options": "",
-            "rank": 12,
+            "rank": 10,
             "value": "text"
         },
-        "AAS": {
+        "AEH": {
             "caption": "Button link (optional)",
             "default_val": "https://airdev.co",
             "editor": "DynamicValue",
             "name": "buttonLink",
             "optional": true,
-            "rank": 16,
+            "rank": 14,
             "value": "text"
         },
-        "AAT": {
+        "AEI": {
             "caption": "Button text (optional)",
             "default_val": "Click me!",
             "editor": "DynamicValue",
             "name": "buttonText",
             "optional": true,
-            "rank": 17,
+            "rank": 15,
             "value": "text"
         },
-        "AAU": {
+        "AEJ": {
             "caption": "Signature (optional)",
             "default_val": "",
             "doc": "Text sent at the end of the email. This field can be HTML if you want to create an HTML signature.",
@@ -106,35 +84,35 @@
             "long_text": true,
             "name": "signature",
             "optional": true,
-            "rank": 20,
+            "rank": 18,
             "value": "text"
         },
-        "AAW": {
+        "AEK": {
             "caption": "Include Button",
             "doc": "Include a button with the email",
             "editor": "DynamicValue",
             "name": "button",
-            "rank": 14,
+            "rank": 12,
             "value": "boolean"
         },
-        "AAX": {
+        "AEL": {
             "caption": "Attachment(s)",
             "doc": "Files to be attached to the email",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "attachments",
             "optional": true,
-            "rank": 22,
+            "rank": 20,
             "value": "file"
         },
-        "AAZ": {
+        "AEM": {
             "caption": "Logo",
             "editor": "DynamicValue",
             "name": "logo",
-            "rank": 13,
+            "rank": 11,
             "value": "image"
         },
-        "AAo": {
+        "AEN": {
             "caption": "From name",
             "doc": "SendGrid only. Name of the sender displayed to the receiver in their inbox",
             "editor": "DynamicValue",
@@ -143,7 +121,7 @@
             "rank": 6,
             "value": "text"
         },
-        "AAp": {
+        "AEO": {
             "caption": "Reply to name",
             "doc": "SendGrid only. Name of the reply-to email displayed to the receiver",
             "editor": "DynamicValue",
@@ -152,63 +130,63 @@
             "rank": 8,
             "value": "text"
         },
-        "AAr": {
+        "AEP": {
             "caption": "Mail Merge",
             "doc": "Fields to be replaced in the following fields: signature, subject, button text, body, from name, reply to name",
             "editor": "key_value_list",
             "name": "mailMerge",
-            "rank": 23,
+            "rank": 21,
             "value": "text"
         },
-        "ABo": {
+        "AEQ": {
             "caption": "Extra parameters",
             "doc": "Enter custom JSON to show other parameters in these fields. Check the SendGrid V3 Send API endpoint documentation for possible parameters to send,                 Example JSON: {\"categories\": [\"marketing\", \"campaign\", \"2021\"],    \"tracking_settings\": {     \"click_tracking\": {       \"enable\": true,       \"enable_text\": false     },     \"open_tracking\": {       \"enable\": true,       \"substitution_tag\": \"%open-track%\"     },     \"subscription_tracking\": {       \"enable\": false     }   }  }",
             "editor": "DynamicValue",
             "long_text": true,
             "name": "extra_parameters",
             "optional": true,
-            "rank": 24,
+            "rank": 22,
             "value": "text"
         },
-        "ABs": {
+        "AER": {
             "caption": "Throw a Bubble error when the email is not sent, or some other error happens on the SendGrid side. This will stop the rest of the workflow from executing.",
             "editor": "Label",
             "name": "info",
-            "rank": 25
+            "rank": 23
         },
-        "ABt": {
+        "AES": {
             "caption": "Throw errors",
             "default_val": false,
             "editor": "DynamicValue",
             "name": "throw_errors",
-            "rank": 26,
+            "rank": 24,
             "value": "boolean"
         },
-        "ABu": {
+        "AET": {
             "caption": "When unhandled errors are NOT thrown, the workflow keeps executing and no error message is shown in the Server logs. Instead, the error message is exposed as a result of this plugin action, and you can set up appropriate error handling logic in the subsequent workflow actions.",
             "editor": "Label",
             "name": "info2",
-            "rank": 27
+            "rank": 25
         },
-        "ACe": {
+        "AEU": {
             "caption": "This plugin supports using either SendGrid or Postmark to send emails. Select the one below that you'd like to use.",
             "editor": "Label",
             "name": "info3",
             "rank": 0
         },
-        "ACf": {
+        "AEV": {
             "caption": "------",
             "editor": "Label",
             "name": "info4",
             "rank": 3
         },
-        "ACg": {
+        "AEW": {
             "caption": "Sendgrid API key is called \"API Key\" in the plugin tab for backward compatibility purposes. API Keys must be set up in the Plugins tab.",
             "editor": "Label",
             "name": "info5",
             "rank": 1
         },
-        "ACh": {
+        "AEX": {
             "caption": "Email provider",
             "default_val": "SendGrid",
             "doc": "Enter either \"sendgrid\" or \"postmark\" in this field. It is not case sensitive. If nothing is entered here, or the text does not match \"sendgrid\" or \"postmark\", SendGrid will be used.",
@@ -218,43 +196,35 @@
             "rank": 2,
             "value": "text"
         },
-        "ADw": {
+        "AEY": {
             "caption": "Copyright (optional)",
             "default_val": "",
             "doc": "Field added June 2021. Adds a subtle text below the white container in the email.",
             "editor": "DynamicValue",
             "name": "copyright",
             "optional": true,
-            "rank": 21,
+            "rank": 19,
             "value": "text"
         },
-        "ADx": {
+        "AEZ": {
             "caption": "Body image (optional)",
             "default_val": "",
             "doc": "Field added June 2021. Adds a nearly full-width image (has margins) below body text and above the signature.",
             "editor": "DynamicValue",
             "name": "body_image",
             "optional": true,
-            "rank": 19,
+            "rank": 17,
             "value": "image"
         },
-        "ADy": {
+        "AEa": {
             "caption": "Header (optional)",
             "default_val": "",
             "doc": "Field added June 2021. Adds a header/title text above the body text.",
             "editor": "DynamicValue",
             "name": "header",
             "optional": true,
-            "rank": 18,
+            "rank": 16,
             "value": "text"
-        },
-        "AEc": {
-            "caption": "old HTML",
-            "default_val": false,
-            "editor": "DynamicValue",
-            "name": "old_html",
-            "rank": 28,
-            "value": "boolean"
         }
     },
     "return_value": {

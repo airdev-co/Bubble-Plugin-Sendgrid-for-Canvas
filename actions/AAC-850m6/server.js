@@ -3,6 +3,8 @@ function(properties, context) {
     var email_provider;
     var postmark;
     var sendgrid;
+    var cc_emails = null;
+    var bcc_emails = null;
     try {
         var email_provider = properties.email_provider.toLowerCase().trim();
         postmark = email_provider.includes("postmark");
@@ -13,20 +15,13 @@ function(properties, context) {
       
     if (sendgrid === true) {
 
-        var log;
+        var log = "";
+
+
+        // sample return for debugging
+        // return {"error": typeof properties.to, "responseDump": JSON.stringify(properties.to.get(0, properties.to.length()))}
 
         // Create email recipient arrays
-        // return {"error": typeof properties.to, "responseDump": JSON.stringify(properties.to.get(0, properties.to.length()))}
-        /*
-        var to  = [];
-        properties.to.get(0, properties.to.length()).forEach(email => to.push({"email": email}));
-        var cc  = [];
-        if (properties.cc !== null && properties.cc.length() > 0)
-            properties.cc.get(0, properties.cc.length()).forEach(email => cc.push({"email": email}));
-        var bcc  = [];
-        if (properties.bcc !== null && properties.bcc.length() > 0)
-            properties.bcc.get(0, properties.bcc.length()).forEach(email => bcc.push({"email": email}));
-            */
         
         if (properties.to === null || properties.to === undefined || properties.to === "") {
             returnError = "\"To email\" input must not be empty. Failed to send email."
@@ -39,47 +34,42 @@ function(properties, context) {
             };
         }
     
-        var to = properties.to.split(",").map(s => s.trim());
-        to = to.map(toEmail => {return {"email": toEmail}});
+        var to_emails = properties.to.split(",").map(s => s.trim());
+        to_emails = deDuplicateArray(to_emails);
+        if (properties.cc && properties.cc !== null && properties.cc !== undefined && properties.cc !== "") {
+            var cc_emails = properties.cc.split(",").map(s => s.trim());
+            cc_emails = deDuplicateArray(cc_emails);
+        }
+        if (properties.bcc && properties.bcc !== null && properties.bcc !== undefined && properties.bcc !== "") {
+            var bcc_emails = properties.bcc.split(",").map(s => s.trim());
+            bcc_emails = deDuplicateArray(bcc_emails);
+        }
+
+        var resp = removeDuplicateToEmailsAcrossArrays(to_emails, cc_emails, bcc_emails);
+        cc_emails = resp[0];
+        bcc_emails = resp[1];
+        log += resp[2];
+      
+        to_emails = to_emails.map(toEmail => {return {"email": toEmail}});
         if (properties.cc) {
-            var cc = properties.cc.split(",").map(s => s.trim());
-            cc = cc.map(toEmail => {return {"email": toEmail}});
+            cc_emails = cc_emails.map(toEmail => {return {"email": toEmail}});
         }
         if (properties.bcc) {
-            var bcc = properties.bcc.split(",").map(s => s.trim());
-            bcc = bcc.map(toEmail => {return {"email": toEmail}});
-        }
-        
-        var htmlString = properties.html;//.replace(/\n/g, "");
-
-
-        // Function to download file and convert to base64
-        function getBase64FromURL(url, callback) {
-
-            var axios = require("axios");
-
-            let image = context.async(async callback => {   
-                var image = await axios.get(url, {responseType: 'arraybuffer'});
-                callback(null, image);
-            });
-
-            // log += Object.keys(image).join();
-            log += JSON.stringify(image.headers);
-
-            let filebase64 = Buffer.from(image.data).toString('base64');
-
-            // attachments.push("test1");
-            callback(filebase64, url);
+            bcc_emails = bcc_emails.map(toEmail => {return {"email": toEmail}});
         }
 
-        // check if there are attachments
+        var htmlString = properties.html;
+
+        // check if there are attachments, and attach them to the email
         var attachments = [];
         var urls = [];
-        if (properties.attachments !== undefined && properties.attachments !== null && properties.attachments.length() > 0) {
+        if (properties.attachments !== null && properties.attachments.length() > 0) {
             properties.attachments.get(0, properties.attachments.length()).forEach(url => {
                 // download base 64 for the file(s)
                 if (!urls.includes(url))
-                    getBase64FromURL("https:" + url, function(base64, url) {
+                    var url_to_get = (!url.includes("http")) ? "https:" + url: url;
+
+                    getBase64FromURL(url_to_get, function(base64, url) {
                         // handle weird urls
                         var filename = url.split('/').pop().split('#')[0].split('?')[0];
                         attachments.push({
@@ -125,6 +115,7 @@ function(properties, context) {
         }
 
 
+        // sample return for debugging
         // return {
         //     "error": JSON.stringify(attachments),
         //     "success": false,
@@ -140,9 +131,9 @@ function(properties, context) {
             },
             body: {
                 "personalizations": 
-                    [{"to": to, 
-                    "cc": cc, 
-                    "bcc": bcc,
+                    [{"to": to_emails, 
+                    "cc": cc_emails, 
+                    "bcc": bcc_emails,
                     "subject": properties.subject}], 
                 "from": {"email": properties.fromEmail,
                          "name": properties.fromName}, 
@@ -199,6 +190,8 @@ function(properties, context) {
         if (attachments.length === 0)
             delete options.body.attachments;
 
+
+    // sample return for debugging
     //  return {"error": "test"}
         let response = context.request(options);
         // check if response is 2XX
@@ -219,6 +212,8 @@ function(properties, context) {
 
         return {
             "error": error,
+            //"log": log,
+            //"requestDump": JSON.stringify(options),
             "success": success,
             "responseCode": response.statusCode,
             //"responseDump" : JSON.stringify(response)
@@ -250,46 +245,30 @@ function(properties, context) {
                 };
             }
     
-            var to = properties.to.split(",").map(s => s.trim());
-            to = to.map(toEmail => {return {"email": toEmail}});
-            to = to.join(",");
-            if (properties.cc) {
-                var cc = properties.cc.split(",").map(s => s.trim());
-                cc = cc.map(toEmail => {return {"email": toEmail}});
-                cc = cc.join(",");
+            var to_emails = properties.to.split(",").map(s => s.trim());
+            to_emails = to_emails.map(toEmail => {return {"email": toEmail}});
+            to_emails = to_emails.join(",");
+            if (properties.cc && properties.cc !== null && properties.cc !== undefined && properties.cc !== "") {
+                var cc_emails = properties.cc.split(",").map(s => s.trim());
+                cc_emails = cc_emails.map(toEmail => {return {"email": toEmail}});
+                cc_emails = cc_emails.join(",");
             }
-            if (properties.bcc) {
-                var bcc = properties.bcc.split(",").map(s => s.trim());
-                bcc = bcc.map(toEmail => {return {"email": toEmail}});
-                bcc = bcc.join(",");
-            }
-
-            function getBase64FromURL(url, callback) {
-
-                var axios = require("axios");
-
-                let image = context.async(async callback => {
-                    var image = await axios.get(url, {responseType: 'arraybuffer'});
-                    callback(null, image);
-                });
-
-                // log += Object.keys(image).join();
-                log += JSON.stringify(image.headers);
-
-                let filebase64 = Buffer.from(image.data).toString('base64');
-
-                // attachments.push("test1");
-                callback(filebase64, url);
+            if (properties.bcc && properties.bcc !== null && properties.bcc !== undefined && properties.bcc !== "") {
+                var bcc_emails = properties.bcc.split(",").map(s => s.trim());
+                bcc_emails = bcc_emails.map(toEmail => {return {"email": toEmail}});
+                bcc_emails = bcc_emails.join(",");
             }
 
-            // check if there are attachments
+            // check if there are attachments, and attach them to the email
             var attachments = [];
             var urls = [];
-            if (properties.attachments !== undefined && properties.attachments !== null && properties.attachments.length() > 0) {
+            if (properties.attachments !== null && properties.attachments.length() > 0) {
                 properties.attachments.get(0, properties.attachments.length()).forEach(url => {
                     // download base 64 for the file(s)
                     if (!urls.includes(url))
-                        getBase64FromURL("https:" + url, function(base64, url) {
+                        var url_to_get = (!url.includes("http")) ? "https:" + url: url;
+    
+                        getBase64FromURL(url_to_get, function(base64, url) {
                             // handle weird urls
                             var filename = url.split('/').pop().split('#')[0].split('?')[0];
                             attachments.push({
@@ -303,19 +282,22 @@ function(properties, context) {
             }
 
 
+            // sample return for debugging
             // return {
             //     "error": JSON.stringify(attachments),
             //     "success": false,
             //     "responseCode": 1234,
             //     "responseDump" : ""
             // }
+            
+            var from = (properties.fromName !== "" && properties.fromName !== null && properties.fromName !== undefined) ? properties.fromName + " <" + properties.fromEmail + ">" : properties.fromEmail;
 
             var postmarkBody = {
-                "From": properties.fromEmail,
+                "From": from,
                 "ReplyTo": properties.replyTo,
                 "To": properties.to,
-                "Cc": cc,
-                "Bcc": bcc,
+                "Cc": cc_emails,
+                "Bcc": bcc_emails,
                 "Subject": properties.subject,
                 "TextBody": plainText,
                 "HtmlBody": htmlString,
@@ -392,6 +374,7 @@ function(properties, context) {
                     postmarkBody[key] = extraParams[key];
                 });
 
+        // sample return for debugging
         //  return {"error": "test"}
             var client = new postmark.ServerClient(context.keys["Postmark Server API Token"]);
             var ret;
@@ -418,10 +401,10 @@ function(properties, context) {
                 }
             });
 
+        // sample return for debugging
             // return {"error": "early return"}
 
             var success = ret.response.ErrorCode === 0;
-            //var error = 
 
             if (properties.throw_errors === true && success === false)
                 throw JSON.stringify(ret);
@@ -444,5 +427,63 @@ function(properties, context) {
             };
         }
     }
+    
+
+  // https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+  function deDuplicateArray(array) {
+    if (array === null || array === undefined)
+    return null;
+    var seen = {};
+    return array.filter(function(item) {
+    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });    
+  }
+      
+  function removeDuplicateToEmailsAcrossArrays(to, cc, bcc) {
+    var log = "";
+    var check_cc = cc !== null && cc !== undefined;
+    var check_bcc = bcc !== null && bcc !== undefined;
+    log += "check_cc: " + check_cc + "  check_bcc: " + check_bcc;
+    if (check_cc || check_bcc)
+      for (var i = 0; i < to.length; i++) {
+        // log += "  loop 1: " + i + ", to: " + JSON.stringify(to) + ", typeof to: " + typeof to + ", typeof to[i]: " + typeof to[i] + ", to[i]: " +  JSON.stringify(to[i]) + ", cc.includes(to[i]): " + cc.includes(to[i]);
+        log += ",  cc: " + JSON.stringify(cc);
+        if (check_cc && cc.includes(to[i])) {
+            log += "  loop 1: " + i + " cc before removal: " + cc;
+            log += "  loop 1: " + i + " removing value " + cc[cc.indexOf(to[i])];
+            cc.splice(cc.indexOf(to[i]), 1);
+            log += "  loop 1: " + i + " cc after removal: " + cc;
+        }
+        if (check_bcc && bcc.includes(to[i]))
+          bcc.splice(bcc.indexOf(to[i]), 1);
+      }
+    if (check_cc && check_bcc)
+      for (var j = 0; j < cc.length; j++) {
+        log += "  loop 2: " + i;
+        if (bcc.includes(cc[j]))
+          bcc.splice(bcc.indexOf(cc[j]), 1);
+      }
+    return [cc, bcc, log];
+  }
+
+    // Function to download file and convert to base64
+    function getBase64FromURL(url, callback) {
+
+        var axios = require("axios");
+
+        let image = context.async(async callback => {   
+            var image = await axios.get(url, {responseType: 'arraybuffer'});
+            callback(null, image);
+        });
+
+        // log += Object.keys(image).join();
+        log += JSON.stringify(image.headers);
+
+        let filebase64 = Buffer.from(image.data).toString('base64');
+
+        // attachments.push("test1");
+        callback(filebase64, url);
+    }
+
 
 }

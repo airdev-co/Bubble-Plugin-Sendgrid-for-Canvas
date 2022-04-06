@@ -175,6 +175,24 @@
             "name": "responseCode",
             "rank": 2,
             "value": "number"
+        },
+        "ADQ": {
+            "caption": "log",
+            "name": "log",
+            "rank": 3,
+            "value": "text"
+        },
+        "ADR": {
+            "caption": "responseDump",
+            "name": "responseDump",
+            "rank": 4,
+            "value": "text"
+        },
+        "ADS": {
+            "caption": "requestDump",
+            "name": "requestDump",
+            "rank": 5,
+            "value": "text"
         }
     },
     "type": "server_side",
